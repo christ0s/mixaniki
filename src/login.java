@@ -8,16 +8,20 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 
-@SuppressWarnings("static-access")
-public class login {
-	
+public class login extends javax.swing.JFrame {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	protected static final String Admin = null;
+	 Statement pst = null;
+	 ResultSet rs = null;
+	 Connection conn=null;
 	
 	private JFrame frame;
 
-	Connection conn=dbtest.connect();
-
 	private JTextField Usertext;
-	private JTextField Passtext;
+	private JPasswordField Passtext;
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -32,14 +36,15 @@ public class login {
 	}
 
 	/**
-	 * Create the application.
+	 * Create the application. 
 	 */
 	
 	
 	public login() {
 		initialize();
-		conn=dbtest.connect();
+		
 	}
+	
 
 	/**
 	 * Initialize the contents of the frame.
@@ -64,50 +69,72 @@ public class login {
 		frame.getContentPane().add(Usertext);
 		Usertext.setColumns(10);
 		
-		Passtext = new JTextField();
-		Passtext.setToolTipText("Password");
-		Passtext.setColumns(10);
-		Passtext.setBounds(166, 86, 86, 20);
-		frame.getContentPane().add(Passtext);
-		
 		JButton loginbtn = new JButton("Log In ");
 		loginbtn.addActionListener(new ActionListener() {
+			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent arg0) {
-				Statement stmt = null;
-				 ResultSet rs = null;
+				conn=dbtest.connect();
 				String sql="SELECT * FROM  accounts WHERE username=? and password=? ";
+				
+				
+				String type1 = "admin";
+				String type2="employ";
+				
 				try{
-					stmt = conn.prepareStatement(sql);
+					PreparedStatement pst = conn.prepareStatement(sql); 
 					
-					((PreparedStatement) stmt).setString(1, Usertext.getText() );
-					((PreparedStatement) stmt).setString(2, Passtext.getText() );
-					rs=stmt.executeQuery(sql);
-				 
-			      
-					 if(rs.next()){
-						 JOptionPane.showMessageDialog(null,"the account is correct");
-						 close();
+					pst.setString(1, Usertext.getText() );
+					pst.setString(2, Passtext.getText() );
+					
+					
+
+					
+					rs=pst.executeQuery();
+					
+					System.out.println("row: " + sql);
+					
+						if( rs.next() & type1.equals(rs.getString("type"))){
+						 JOptionPane.showMessageDialog(null,"the administrator account is correct");
+						 AdminGui w =new AdminGui();
+						 w.Main();
+						 
+						 System.out.println("row: " + rs.getString("type"));
+						
+						
+					
 					 }
-					
+						else if  ( type2.equals(rs.getString("type"))) 
+						{
+							 JOptionPane.showMessageDialog(null,"the employ account is correct");
+							 
+							 
+							
+						}
+						
+						
 					 else {
+						 System.out.println("ID: "     );
 						 JOptionPane.showMessageDialog(null,"Username or Password is not correct ");
+						 
 					 }
 					 rs.close();
-					 stmt.close();
-			      
+					 pst.close();
+					
 				}	
 				catch(Exception e){
-					JOptionPane.showMessageDialog(null, e);
+					JOptionPane.showMessageDialog(null, e	);
 				}
 			}
 
-			private void close() {
-				// TODO Auto-generated method stub
-				
-			} 
+		
 		});
 		loginbtn.setBounds(289, 55, 104, 51);
 		frame.getContentPane().add(loginbtn);
+		
+		Passtext = new JPasswordField();
+		Passtext.setBounds(166, 86, 86, 20);
+		frame.getContentPane().add(Passtext);
 	}
+
 
 }

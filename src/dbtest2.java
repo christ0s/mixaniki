@@ -1,15 +1,15 @@
-
-import javax.swing.*;
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
+
 import java.sql.*;
 
+import javax.swing.JOptionPane;
 
-
-public class dbtest {
-	 static Statement stmt = null;
+public class dbtest2 {
+	static Statement stmt = null;
 	 static ResultSet rs = null;
 	 static Connection conn=null;
 	 public static Connection connect(){
@@ -17,7 +17,7 @@ public class dbtest {
 	  try
 	  {
 	  Class.forName("com.mysql.jdbc.Driver").newInstance();
-	  String url = "jdbc:mysql://83.212.101.143:3306/mydb";
+	  String url = "jdbc:mysql://83.212.101.143:3306/Sunavlies";
 	  String dbusername = "root";
 	  String dbpassword = "";
 
@@ -25,7 +25,7 @@ public class dbtest {
 	  conn = DriverManager.getConnection(url, dbusername, dbpassword);
 	  JOptionPane.showMessageDialog(null,"Database connected!");
 	  return conn;
-     
+    
 	  }
 	  catch (Exception e)
 	  {
@@ -39,4 +39,4 @@ public class dbtest {
 		  e.printStackTrace(); }
 	 return null;
 	}
-  }
+}
