@@ -40,9 +40,10 @@ public class EmpGui {
 
 	private JFrame frame;
 	Statement pst = null;
-	ResultSet ps;
-	Connection conn=null;
-	private JComboBox comboBoxLive;
+	static ResultSet ps;
+	static Connection conn=null;
+	private static JTable LiveTable;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -52,6 +53,7 @@ public class EmpGui {
 				try {
 					EmpGui window = new EmpGui();
 					window.frame.setVisible(true);
+					UpdateJtable();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -62,6 +64,20 @@ public class EmpGui {
 	/**
 	 * Create the application.
 	 */
+	public static void UpdateJtable()
+	{
+		conn = (Connection) dbtest.connect();
+		String sql="Select LiveName,TicketPrice,Location,Seats from Sunavlies";
+		try{
+			PreparedStatement pst = (PreparedStatement) conn.prepareStatement(sql); 
+			ps=pst.executeQuery();
+			LiveTable.setModel(DbUtils.resultSetToTableModel(ps));
+				
+		}	
+		catch(Exception e1){
+			JOptionPane.showMessageDialog(null, e1	);
+		}
+	}
 	public EmpGui() {
 		initialize();
 	}
@@ -81,30 +97,22 @@ public class EmpGui {
 		frame.getContentPane().add(panel, "name_11652493827729");
 		panel.setLayout(null);
 		
+		JScrollPane Tablepane = new JScrollPane();
+		Tablepane.setBounds(24, 21, 431, 155);
+		panel.add(Tablepane);
 		
-		fillComboBox();
-		JComboBox comboBoxLive = new JComboBox();
-		comboBoxLive.setBounds(34, 25, 179, 33);
-		panel.add(comboBoxLive);
-	}
-
-	public void fillComboBox()
-	{
+		LiveTable = new JTable();
+		Tablepane.setViewportView(LiveTable);
 		
-		conn = (Connection) dbtest2.connect();
-		String sql="Show tables  ";
-		try{
-			PreparedStatement pst = (PreparedStatement) conn.prepareStatement(sql); 
-			ps=pst.executeQuery();
-			while(ps.next()){
-				
-				
-			}
+		JButton BookNow = new JButton("Book Now");
+		BookNow.setBounds(60, 255, 148, 50);
+		panel.add(BookNow);
 		
-				
-		}	
-		catch(Exception e1){
-			JOptionPane.showMessageDialog(null, e1	);
-		}
+		JButton Exit = new JButton("Exit");
+		Exit.setBounds(278, 255, 148, 50);
+		panel.add(Exit);
+		
+		
+		
 	}
 }

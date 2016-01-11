@@ -53,18 +53,34 @@ public class AdminGui {
 				try {
 					AdminGui window = new AdminGui();
 					window.frmAdministratorPanel.setVisible(true);
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
 	}
+	
 
 	/**
 	 * Create the application.
 	 */
 	public AdminGui() {
 		initialize();
+	}
+	public void UpdateJtable()
+	{
+		conn = (Connection) dbtest.connect();
+		String sql="Select LiveName,TicketPrice,Location,Seats from Sunavlies";
+		try{
+			PreparedStatement pst = (PreparedStatement) conn.prepareStatement(sql); 
+			ps=pst.executeQuery();
+			LiveTable.setModel(DbUtils.resultSetToTableModel(ps));
+				
+		}	
+		catch(Exception e1){
+			JOptionPane.showMessageDialog(null, e1	);
+		}
 	}
 
 	/**
@@ -112,7 +128,7 @@ public class AdminGui {
 		LiveTable = new JTable();
 		scrollPane.setViewportView(LiveTable);
 		LiveTable.setCellSelectionEnabled(true);
-		LiveTable.removeEditor();
+
 		
 
 		LiveTable.setModel(new DefaultTableModel(
@@ -120,26 +136,14 @@ public class AdminGui {
 				
 			},
 			new String[] {
-				"Lives"
+				
 			}
 		));
 		
 		JButton btnRefresh = new JButton("Refresh");
 		btnRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				conn = (Connection) dbtest2.connect();
-				String sql="show tables";
-				try{
-					PreparedStatement pst = (PreparedStatement) conn.prepareStatement(sql); 
-					ps=pst.executeQuery();
-					LiveTable.setModel(DbUtils.resultSetToTableModel(ps));
-						
-				}	
-				catch(Exception e1){
-					JOptionPane.showMessageDialog(null, e1	);
-				}
-				
-				
+				UpdateJtable();
 			}
 		});
 		btnRefresh.setBounds(348, 24, 76, 23);
@@ -148,63 +152,88 @@ public class AdminGui {
 		deletebtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
-			
-				JOptionPane.showConfirmDialog(LiveTable, "You Selected : " + LiveTable.getSelectedRow() , "Display",
+				
+				JOptionPane.showConfirmDialog(LiveTable, "You Selected : " + LiveTable.getSelectionModel() , "Display",
 	                    JOptionPane.PLAIN_MESSAGE);
+				conn = (Connection) dbtest.connect();
+				String sql="DELETE  FROM Sunavlies WHERE id =? ";
+				try {
+					PreparedStatement pst = (PreparedStatement) conn.prepareStatement(sql);
+					pst.setInt(1,LiveTable.getSelectedRowCount());
+					rs=pst.execute();
+					UpdateJtable();
+					
+				} catch (SQLException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				} 
 			}
+			
 		});
 		deletebtn.setBounds(122, 214, 102, 23);
 		AdminPanel.add(deletebtn);
 		
 		JLabel label = new JLabel("\u039F\u03BD\u03BF\u03BC\u03B1 \u03A3\u03C5\u03BD\u03B1\u03C5\u03BB\u03B9\u03B1\u03C2");
-		label.setBounds(21, 56, 109, 14);
+		label.setBounds(21, 35, 109, 14);
 		InsertPanel.add(label);
 		
 		final JTextArea livename = new JTextArea();
-		livename.setBounds(152, 56, 102, 16);
+		livename.setBounds(152, 35, 102, 16);
 		InsertPanel.add(livename);
 		
 		final JTextArea seatnum = new JTextArea();
-		seatnum.setBounds(152, 92, 102, 16);
+		seatnum.setBounds(152, 116, 102, 16);
 		InsertPanel.add(seatnum);
 		
 		
 		final JTextArea timer = new JTextArea();
-		timer.setBounds(152, 134, 102, 16);
+		timer.setBounds(152, 143, 102, 16);
 		InsertPanel.add(timer);
 		
 		final JTextArea pricer = new JTextArea();
-		pricer.setBounds(152, 176, 102, 16);
+		pricer.setBounds(152, 170, 102, 16);
 		InsertPanel.add(pricer);
+		JLabel label_3 = new JLabel("\u03A4\u03B9\u03BC\u03B7 \u0395\u03B9\u03C3\u03B9\u03C4\u03B7\u03C1\u03B9\u03BF\u03C5");
+		label_3.setBounds(21, 166, 82, 14);
+		InsertPanel.add(label_3);
+		
+		JLabel label_4 = new JLabel("\u03A7\u03C9\u03C1\u03BF\u03C2 \u03A3\u03C5\u03BD\u03B1\u03C5\u03BB\u03B9\u03B1\u03C2");
+		label_4.setBounds(21, 66, 109, 14);
+		InsertPanel.add(label_4);
+		
+		final JTextArea Loc = new JTextArea();
+		Loc.setBounds(152, 66, 102, 16);
+		InsertPanel.add(Loc);
+		
+		JLabel label_5 = new JLabel("\u0394\u03B9\u03B5\u03C5\u03B8\u03C5\u03BD\u03C3\u03B7");
+		label_5.setBounds(21, 91, 109, 14);
+		InsertPanel.add(label_5);
+		
+		final JTextArea Adress = new JTextArea();
+		Adress.setBounds(152, 91, 102, 16);
+		InsertPanel.add(Adress);
 		
 		JButton button_3 = new JButton("Confirm The Live");
 		button_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				conn = (Connection) dbtest2.connect();
-				String tablename=livename.getText();
-				String seat=seatnum.getText();
-				String time=timer.getText();
-				String price=pricer.getText();
+				conn = (Connection) dbtest.connect();
 				
-				String tableDropQuery = "DROP TABLE IF EXISTS "+tablename+"";
-				String sql = "CREATE TABLE "+tablename+" ("
-                 +" id bigint(255) NOT NULL AUTO_INCREMENT PRIMARY KEY,"+""
-                 		+ "seats bigint(255),"
-                 		+ "Times varchar(15),"	
-                 		+ "Active bigint(255),"
-                 		+ "Price Double)";
-				String sqlupdate="INSERT INTO "+tablename+"  ( seats, Times, Active, Price) "+
-                   "VALUES ("+seat+",'" +time+"',"+seat+", "+price+")";
+				
+				String sql = "INSERT INTO Sunavlies	 (Livename,Location,Adress,Seats,DateTime,TicketPrice)"
+						+ "values(?,?,?,?,?,?)";
+					
+                 
 				try{
 					PreparedStatement pst = (PreparedStatement) conn.prepareStatement(sql); 
-					PreparedStatement pst2 = (PreparedStatement) conn.prepareStatement(tableDropQuery); 
-					PreparedStatement pst3 = (PreparedStatement) conn.prepareStatement(sqlupdate); 
-					System.out.println("row: " + sqlupdate);
-					System.out.println("row: " + sql);
-					System.out.println("row: " +  tableDropQuery);
-					rs=pst2.execute();
+				
+					pst.setString (1, livename.getText());
+					pst.setString (2, Loc.getText());
+					pst.setString   (3, Adress.getText());
+					pst.setInt(4, Integer.parseInt(seatnum.getText()));
+					pst.setString(5,timer.getText() );
+					pst.setString   (6, pricer.getText());
 					rs=pst.execute();
-					rs=pst3.execute();
+					
 					
 					
 						
@@ -222,11 +251,11 @@ public class AdminGui {
 	
 		
 		JLabel label_1 = new JLabel("\u0391\u03C1\u03B9\u03B8\u03BC\u03BF\u03C2 \u0398\u03B5\u03C3\u03B5\u03C9\u03BD");
-		label_1.setBounds(21, 92, 82, 14);
+		label_1.setBounds(21, 116, 82, 14);
 		InsertPanel.add(label_1);
 		
-		JLabel label_2 = new JLabel("\u03A9\u03C1\u03B1 \u03B5\u03BD\u03B1\u03C1\u03BE\u03B7\u03C2");
-		label_2.setBounds(21, 134, 82, 14);
+		JLabel label_2 = new JLabel("\u0397\u03BC\u03B5\u03C1\u03BF\u03BC\u03B7\u03BD\u03B9\u03B1/\u03A9\u03C1\u03B1 ");
+		label_2.setBounds(21, 141, 121, 14);
 		InsertPanel.add(label_2);
 	
 		
@@ -235,15 +264,15 @@ public class AdminGui {
 			public void actionPerformed(ActionEvent e) {
 				InsertPanel.setVisible(false);
 				AdminPanel.setVisible(true);
+				UpdateJtable();
 				
 			}
 		});
 		button_4.setBounds(281, 145, 130, 33);
 		InsertPanel.add(button_4);
+
 		
 		
-		JLabel label_3 = new JLabel("\u03A4\u03B9\u03BC\u03B7 \u0395\u03B9\u03C3\u03B9\u03C4\u03B7\u03C1\u03B9\u03BF\u03C5");
-		label_3.setBounds(21, 176, 82, 14);
-		InsertPanel.add(label_3);
+		
 	}
 }
