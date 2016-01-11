@@ -26,6 +26,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.*;
 import javax.swing.JScrollPane;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class AdminGui {
 
@@ -86,7 +88,7 @@ public class AdminGui {
 		InsertPanel.setLayout(null);
 		InsertPanel.setVisible(false);
 		
-		JButton insertbtn = new JButton("Insert");
+		JButton insertbtn = new JButton("Insert New");
 		insertbtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				InsertPanel.setVisible(true);
@@ -94,23 +96,25 @@ public class AdminGui {
 			}
 		});
 		
-		insertbtn.setBounds(25, 214, 89, 23);
+		insertbtn.setBounds(10, 214, 102, 23);
 		AdminPanel.add(insertbtn);
 		
-		JButton deletebtn = new JButton("Delete");
-		deletebtn.setBounds(124, 214, 89, 23);
-		AdminPanel.add(deletebtn);
+		
 		
 		JButton exitbtn = new JButton("Exit");
-		exitbtn.setBounds(223, 214, 89, 23);
+		exitbtn.setBounds(236, 214, 102, 23);
 		AdminPanel.add(exitbtn);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(25, 24, 287, 165);
+		scrollPane.setBounds(10, 24, 328, 165);
 		AdminPanel.add(scrollPane);
 		
 		LiveTable = new JTable();
 		scrollPane.setViewportView(LiveTable);
+		LiveTable.setCellSelectionEnabled(true);
+		LiveTable.removeEditor();
+		
+
 		LiveTable.setModel(new DefaultTableModel(
 			new Object[][] {
 				
@@ -138,9 +142,19 @@ public class AdminGui {
 				
 			}
 		});
-		btnRefresh.setBounds(322, 24, 89, 23);
+		btnRefresh.setBounds(348, 24, 76, 23);
 		AdminPanel.add(btnRefresh);
-	
+		JButton deletebtn = new JButton("Delete");
+		deletebtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+			
+				JOptionPane.showConfirmDialog(LiveTable, "You Selected : " + LiveTable.getSelectedRow() , "Display",
+	                    JOptionPane.PLAIN_MESSAGE);
+			}
+		});
+		deletebtn.setBounds(122, 214, 102, 23);
+		AdminPanel.add(deletebtn);
 		
 		JLabel label = new JLabel("\u039F\u03BD\u03BF\u03BC\u03B1 \u03A3\u03C5\u03BD\u03B1\u03C5\u03BB\u03B9\u03B1\u03C2");
 		label.setBounds(21, 56, 109, 14);
