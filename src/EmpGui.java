@@ -86,6 +86,20 @@ public class EmpGui {
 	 * Initialize the contents of the frame.
 	 */
 	
+	public String valueSelected() {
+        String selectedData = null;
+
+        int[] selectedRow = LiveTable.getSelectedRows();
+        int[] selectedColumns = LiveTable.getSelectedColumns();
+
+        for (int i = 0; i < selectedRow.length; i++) {
+          for (int j = 0; j < selectedColumns.length; j++) {
+            selectedData = (String) LiveTable.getValueAt(selectedRow[i], selectedColumns[j]);
+          }
+        }
+        return selectedData;
+        
+      }
 	
 	private void initialize() {
 		frame = new JFrame();

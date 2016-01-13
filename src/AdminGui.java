@@ -60,8 +60,20 @@ public class AdminGui {
 			}
 		});
 	}
-	
+	public String valueSelected() {
+        String selectedData = null;
 
+        int[] selectedRow = LiveTable.getSelectedRows();
+        int[] selectedColumns = LiveTable.getSelectedColumns();
+
+        for (int i = 0; i < selectedRow.length; i++) {
+          for (int j = 0; j < selectedColumns.length; j++) {
+            selectedData = (String) LiveTable.getValueAt(selectedRow[i], selectedColumns[j]);
+          }
+        }
+        return selectedData;
+        
+      }
 	/**
 	 * Create the application.
 	 */
@@ -131,7 +143,8 @@ public class AdminGui {
 
 		
 
-		LiveTable.setModel(new DefaultTableModel(
+		LiveTable.setModel(new DefaultTableModel 
+				(
 			new Object[][] {
 				
 			},
@@ -148,18 +161,19 @@ public class AdminGui {
 		});
 		btnRefresh.setBounds(348, 24, 76, 23);
 		AdminPanel.add(btnRefresh);
+		
+		
 		JButton deletebtn = new JButton("Delete");
 		deletebtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
-				
-				JOptionPane.showConfirmDialog(LiveTable, "You Selected : " + LiveTable.getSelectionModel() , "Display",
+			 				JOptionPane.showConfirmDialog(LiveTable, "You Selected : " + valueSelected() , "Display",
 	                    JOptionPane.PLAIN_MESSAGE);
 				conn = (Connection) dbtest.connect();
-				String sql="DELETE  FROM Sunavlies WHERE id =? ";
+				String sql="DELETE  FROM Sunavlies WHERE LiveName =? ";
 				try {
 					PreparedStatement pst = (PreparedStatement) conn.prepareStatement(sql);
-					pst.setInt(1,LiveTable.getSelectedRowCount());
+					pst.setString(1,valueSelected());
 					rs=pst.execute();
 					UpdateJtable();
 					
@@ -167,7 +181,7 @@ public class AdminGui {
 					// TODO Auto-generated catch block
 					e2.printStackTrace();
 				} 
-			}
+			}//apopeira gia delete
 			
 		});
 		deletebtn.setBounds(122, 214, 102, 23);
@@ -213,8 +227,8 @@ public class AdminGui {
 		Adress.setBounds(152, 91, 102, 16);
 		InsertPanel.add(Adress);
 		
-		JButton button_3 = new JButton("Confirm The Live");
-		button_3.addActionListener(new ActionListener() {
+		JButton btnConfirmLive = new JButton("Confirm Live");
+		btnConfirmLive.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				conn = (Connection) dbtest.connect();
 				
@@ -245,8 +259,8 @@ public class AdminGui {
 				
 			}
 		});
-		button_3.setBounds(281, 73, 130, 33);
-		InsertPanel.add(button_3);
+		btnConfirmLive.setBounds(281, 73, 130, 33);
+		InsertPanel.add(btnConfirmLive);
 		
 	
 		
