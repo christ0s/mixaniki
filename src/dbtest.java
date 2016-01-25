@@ -23,7 +23,7 @@ public class dbtest {
 
 	  System.out.println("Connecting database...");
 	  conn = DriverManager.getConnection(url, dbusername, dbpassword);
-	  JOptionPane.showMessageDialog(null,"Database connected!");
+	
 	  return conn;
      
 	  }

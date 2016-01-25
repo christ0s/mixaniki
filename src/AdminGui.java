@@ -130,6 +130,11 @@ public class AdminGui {
 		
 		
 		JButton exitbtn = new JButton("Exit");
+		exitbtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.exit(0);
+			}
+		});
 		exitbtn.setBounds(236, 214, 102, 23);
 		AdminPanel.add(exitbtn);
 		
@@ -167,8 +172,7 @@ public class AdminGui {
 		deletebtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
-			 				JOptionPane.showConfirmDialog(LiveTable, "You Selected : " + valueSelected() , "Display",
-	                    JOptionPane.PLAIN_MESSAGE);
+			 			
 				conn = (Connection) dbtest.connect();
 				String sql="DELETE  FROM Sunavlies WHERE LiveName =? ";
 				try {
@@ -200,15 +204,15 @@ public class AdminGui {
 		InsertPanel.add(seatnum);
 		
 		
-		final JTextArea timer = new JTextArea();
-		timer.setBounds(152, 143, 102, 16);
-		InsertPanel.add(timer);
+		final JTextArea dater = new JTextArea();
+		dater.setBounds(152, 143, 102, 16);
+		InsertPanel.add(dater);
 		
 		final JTextArea pricer = new JTextArea();
-		pricer.setBounds(152, 170, 102, 16);
+		pricer.setBounds(152, 189, 102, 16);
 		InsertPanel.add(pricer);
 		JLabel label_3 = new JLabel("\u03A4\u03B9\u03BC\u03B7 \u0395\u03B9\u03C3\u03B9\u03C4\u03B7\u03C1\u03B9\u03BF\u03C5");
-		label_3.setBounds(21, 166, 82, 14);
+		label_3.setBounds(21, 189, 82, 14);
 		InsertPanel.add(label_3);
 		
 		JLabel label_4 = new JLabel("\u03A7\u03C9\u03C1\u03BF\u03C2 \u03A3\u03C5\u03BD\u03B1\u03C5\u03BB\u03B9\u03B1\u03C2");
@@ -227,14 +231,22 @@ public class AdminGui {
 		Adress.setBounds(152, 91, 102, 16);
 		InsertPanel.add(Adress);
 		
+		JLabel label_6 = new JLabel("\u03A9\u03C1\u03B1");
+		label_6.setBounds(21, 166, 82, 14);
+		InsertPanel.add(label_6);
+		
+		final JTextArea timer = new JTextArea();
+		timer.setBounds(152, 166, 102, 16);
+		InsertPanel.add(timer);
+		
 		JButton btnConfirmLive = new JButton("Confirm Live");
 		btnConfirmLive.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				conn = (Connection) dbtest.connect();
 				
 				
-				String sql = "INSERT INTO Sunavlies	 (Livename,Location,Adress,Seats,DateTime,TicketPrice)"
-						+ "values(?,?,?,?,?,?)";
+				String sql = "INSERT INTO Sunavlies	 (Livename,Location,Adress,Seats,Date,Time,TicketPrice)"
+						+ "values(?,?,?,?,?,?,?)";
 					
                  
 				try{
@@ -244,16 +256,19 @@ public class AdminGui {
 					pst.setString (2, Loc.getText());
 					pst.setString   (3, Adress.getText());
 					pst.setInt(4, Integer.parseInt(seatnum.getText()));
-					pst.setString(5,timer.getText() );
-					pst.setString   (6, pricer.getText());
+					pst.setString(5,dater.getText() );
+					pst.setString(6,timer.getText() );
+					pst.setString   (7, pricer.getText());
 					rs=pst.execute();
-					
+					InsertPanel.setVisible(false);
+					AdminPanel.setVisible(true);
+					UpdateJtable();
 					
 					
 						
 				}	
 				catch(Exception e1){
-					JOptionPane.showMessageDialog(null, e1	);
+					JOptionPane.showMessageDialog(null, "Number of Seats must be integer"	);
 				}
 			
 				
@@ -268,7 +283,7 @@ public class AdminGui {
 		label_1.setBounds(21, 116, 82, 14);
 		InsertPanel.add(label_1);
 		
-		JLabel label_2 = new JLabel("\u0397\u03BC\u03B5\u03C1\u03BF\u03BC\u03B7\u03BD\u03B9\u03B1/\u03A9\u03C1\u03B1 ");
+		JLabel label_2 = new JLabel("\u0397\u03BC\u03B5\u03C1\u03BF\u03BC\u03B7\u03BD\u03B9\u03B1");
 		label_2.setBounds(21, 141, 121, 14);
 		InsertPanel.add(label_2);
 	
@@ -284,6 +299,8 @@ public class AdminGui {
 		});
 		button_4.setBounds(281, 145, 130, 33);
 		InsertPanel.add(button_4);
+		
+		
 
 		
 		

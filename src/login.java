@@ -91,23 +91,23 @@ public class login extends javax.swing.JFrame {
 					
 					rs=pst.executeQuery();
 					
-					System.out.println("row: " + sql);
+				
 					
 						if( rs.next() & type1.equals(rs.getString("type"))){
-						 JOptionPane.showMessageDialog(null,"the administrator account is correct");
+						 
 						
 						 AdminGui w =new AdminGui();
 						 w.Main();
 						
 						 
-						 System.out.println("row: " + rs.getString("type"));
+					
 						
 						
 					
 					 }
 						else if  ( type2.equals(rs.getString("type"))) 
 						{
-							 JOptionPane.showMessageDialog(null,"the employ account is correct");
+				
 							 EmpGui w =new EmpGui();
 							 w.main();
 							 
