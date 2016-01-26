@@ -41,6 +41,7 @@ import javax.swing.Spring;
 
 import java.awt.Font;
 import javax.swing.SwingConstants;
+import java.awt.Dialog.ModalExclusionType;
 public class EmpGui {
 
 	private JFrame frame;
@@ -114,7 +115,7 @@ public class EmpGui {
 
         for (int i = 0; i < selectedRow.length; i++) {
           for (int j = 0; j < selectedColumns.length; j++) {
-            selectedData = (String) LiveTable.getValueAt(selectedRow[i], selectedColumns[j]);
+            selectedData = (String) LiveTable.getValueAt(selectedRow[i], 0); // Se opoiodipote cell tou jtable patisei o xristis thelw na epistrefei tin timi tou prwtou collumn me to selected row
           }
         }
         return selectedData;
@@ -126,6 +127,7 @@ public class EmpGui {
 		frame.setBounds(100, 100, 516, 407);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new CardLayout(0, 0));
+		frame.setLocationRelativeTo(null);
 		
 		final JPanel Employpanel = new JPanel();
 		frame.getContentPane().add(Employpanel, "name_11652493827729");
@@ -176,6 +178,11 @@ public class EmpGui {
 		LiveTable = new JTable();
 		Tablepane.setViewportView(LiveTable);
 		
+
+		final JLabel ticketsleftlbl = new JLabel("");
+		ticketsleftlbl.setBounds(90, 52, 46, 14);
+		BookingPanel.add(ticketsleftlbl);
+		
 		JButton BookNow = new JButton("Book Now");
 		BookNow.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -199,6 +206,8 @@ public class EmpGui {
 						
 				
 				Livelbl.setText(String.valueOf(live));
+				ticketsleftlbl.setText(String.valueOf(seat));
+				name.setText(null);
 				BookingPanel.setVisible(true);
 				Employpanel.setVisible(false);
 					}
@@ -222,45 +231,45 @@ public class EmpGui {
 		livelbl.setBounds(145, 11, 187, 51);
 		Printpanel.add(livelbl);
 		final JLabel namelbl = new JLabel("New label");
-		namelbl.setHorizontalAlignment(SwingConstants.CENTER);
+		namelbl.setHorizontalAlignment(SwingConstants.LEFT);
 		namelbl.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		namelbl.setBounds(184, 73, 285, 51);
 		Printpanel.add(namelbl);
 		
 		final JLabel locationlbl = new JLabel("New label");
-		locationlbl.setHorizontalAlignment(SwingConstants.CENTER);
+		locationlbl.setHorizontalAlignment(SwingConstants.LEFT);
 		locationlbl.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		locationlbl.setBounds(184, 135, 148, 51);
 		Printpanel.add(locationlbl);
 		
 		final JLabel datelbl = new JLabel("New label");
-		datelbl.setHorizontalAlignment(SwingConstants.CENTER);
+		datelbl.setHorizontalAlignment(SwingConstants.LEFT);
 		datelbl.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		datelbl.setBounds(230, 197, 260, 51);
+		datelbl.setBounds(184, 197, 260, 51);
 		Printpanel.add(datelbl);
 		
 		final JLabel timelbl = new JLabel("New label");
-		timelbl.setHorizontalAlignment(SwingConstants.CENTER);
+		timelbl.setHorizontalAlignment(SwingConstants.LEFT);
 		timelbl.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		timelbl.setBounds(230, 259, 260, 51);
+		timelbl.setBounds(184, 259, 260, 51);
 		Printpanel.add(timelbl);
 		
 		JLabel label_4 = new JLabel("\u0394\u03B9\u03AD\u03B8\u03C5\u03BD\u03C3\u03B7");
 		label_4.setHorizontalAlignment(SwingConstants.CENTER);
 		label_4.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		label_4.setBounds(22, 135, 148, 51);
+		label_4.setBounds(22, 135, 116, 51);
 		Printpanel.add(label_4);
 		
 		JLabel label_6 = new JLabel("\u0397\u03BC\u03B5\u03C1\u03BF\u03BC\u03B7\u03BD\u03AF\u03B1");
 		label_6.setHorizontalAlignment(SwingConstants.CENTER);
 		label_6.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		label_6.setBounds(22, 197, 148, 51);
+		label_6.setBounds(22, 197, 129, 51);
 		Printpanel.add(label_6);
 		
 		JLabel label_8 = new JLabel("\u038F\u03C1\u03B1");
 		label_8.setHorizontalAlignment(SwingConstants.CENTER);
 		label_8.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		label_8.setBounds(10, 259, 148, 51);
+		label_8.setBounds(10, 259, 129, 51);
 		Printpanel.add(label_8);
 		
 		JLabel label_7 = new JLabel("\u039F\u03BD\u03BF\u03BC\u03B1/\u03BD\u03C5\u03BC\u03BF");
@@ -270,7 +279,7 @@ public class EmpGui {
 		Printpanel.add(label_7);
 		
 		final JLabel adresslbl = new JLabel("New label");
-		adresslbl.setHorizontalAlignment(SwingConstants.CENTER);
+		adresslbl.setHorizontalAlignment(SwingConstants.LEFT);
 		adresslbl.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		adresslbl.setBounds(342, 135, 148, 51);
 		Printpanel.add(adresslbl);
@@ -279,24 +288,29 @@ public class EmpGui {
 		btnPrint.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JOptionPane.showMessageDialog(null, "Thank you for Booking , Greetings");
-				Printpanel.setVisible(false);
+				UpdateJtable();
+				Printpanel.setVisible(false);	
 				Employpanel.setVisible(true);
 			}
 		});
-		btnPrint.setBounds(294, 319, 183, 39);
+		btnPrint.setBounds(307, 307, 183, 39);
 		Printpanel.add(btnPrint);
 		
 		JLabel label = new JLabel("\u03A4\u03B9\u03BC\u03AE");
 		label.setHorizontalAlignment(SwingConstants.CENTER);
 		label.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		label.setBounds(22, 307, 148, 51);
+		label.setBounds(22, 307, 97, 51);
 		Printpanel.add(label);
 		
 		final JLabel TicketPricelbl = new JLabel("New label");
 		TicketPricelbl.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		TicketPricelbl.setHorizontalAlignment(SwingConstants.LEFT);
-		TicketPricelbl.setBounds(180, 313, 94, 39);
+		TicketPricelbl.setBounds(184, 313, 66, 39);
 		Printpanel.add(TicketPricelbl);
+		
+		JLabel lblEuro = new JLabel("Euro");
+		lblEuro.setBounds(228, 332, 46, 14);
+		Printpanel.add(lblEuro);
 		
 		
 		BookNow.setBounds(60, 255, 148, 50);
@@ -351,6 +365,11 @@ public class EmpGui {
 		});
 		btnBook.setBounds(122, 129, 228, 40);
 		BookingPanel.add(btnBook);
+		
+		JLabel lblNewLabel_1 = new JLabel("Tickets left:");
+		lblNewLabel_1.setBounds(10, 52, 76, 14);
+		BookingPanel.add(lblNewLabel_1);
+		
 		JButton Exit = new JButton("Exit");
 		Exit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

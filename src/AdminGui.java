@@ -1,7 +1,10 @@
 import java.awt.EventQueue;
+import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 import java.awt.CardLayout;
+import java.awt.Dimension;
+
 import javax.swing.JPanel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -36,13 +39,13 @@ public class AdminGui {
 	@SuppressWarnings("unused")
 	private JPanel AdminPanel;
 	private JPanel InsertPanel;
-	private JTable LiveTable;
+	private static JTable LiveTable;
 	 Statement pst = null;
 	 Statement pst2= null;
 	 Statement pst3= null;
-	 ResultSet ps;
+	 static ResultSet ps;
 	 boolean rs ;
-	 Connection conn=null;
+	 static Connection conn=null;
 	
 	/**
 	 * Launch the application.
@@ -53,6 +56,7 @@ public class AdminGui {
 				try {
 					AdminGui window = new AdminGui();
 					window.frmAdministratorPanel.setVisible(true);
+					UpdateJtable();
 					
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -68,7 +72,7 @@ public class AdminGui {
 
         for (int i = 0; i < selectedRow.length; i++) {
           for (int j = 0; j < selectedColumns.length; j++) {
-            selectedData = (String) LiveTable.getValueAt(selectedRow[i], selectedColumns[j]);
+            selectedData = (String) LiveTable.getValueAt(selectedRow[i], 0);// Se opoiodipote cell tou jtable patisei o xristis thelw na epistrefei tin timi tou prwtou collumn me to selected row
           }
         }
         return selectedData;
@@ -80,7 +84,7 @@ public class AdminGui {
 	public AdminGui() {
 		initialize();
 	}
-	public void UpdateJtable()
+	public static void UpdateJtable()
 	{
 		conn = (Connection) dbtest.connect();
 		String sql="Select LiveName,TicketPrice,Location,Seats from Sunavlies";
@@ -105,11 +109,15 @@ public class AdminGui {
 		frmAdministratorPanel.setBounds(100, 100, 450, 300);
 		frmAdministratorPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmAdministratorPanel.getContentPane().setLayout(new CardLayout(0, 0));
+		frmAdministratorPanel.setLocationRelativeTo(null);
+		
+		
 		
 		final JPanel AdminPanel = new JPanel();
 		frmAdministratorPanel.getContentPane().add(AdminPanel, "name_24230894125256");
 		AdminPanel.setLayout(null);
 		AdminPanel.setVisible(true);
+		
 		
 		final JPanel InsertPanel = new JPanel();
 		frmAdministratorPanel.getContentPane().add(InsertPanel, "name_24230908830568");
@@ -124,7 +132,7 @@ public class AdminGui {
 			}
 		});
 		
-		insertbtn.setBounds(10, 214, 102, 23);
+		insertbtn.setBounds(10, 214, 93, 23);
 		AdminPanel.add(insertbtn);
 		
 		
@@ -135,11 +143,11 @@ public class AdminGui {
 				System.exit(0);
 			}
 		});
-		exitbtn.setBounds(236, 214, 102, 23);
+		exitbtn.setBounds(216, 214, 93, 23);
 		AdminPanel.add(exitbtn);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 24, 328, 165);
+		scrollPane.setBounds(10, 24, 400, 165);
 		AdminPanel.add(scrollPane);
 		
 		LiveTable = new JTable();
@@ -164,7 +172,7 @@ public class AdminGui {
 				UpdateJtable();
 			}
 		});
-		btnRefresh.setBounds(348, 24, 76, 23);
+		btnRefresh.setBounds(319, 214, 91, 23);
 		AdminPanel.add(btnRefresh);
 		
 		
@@ -172,23 +180,29 @@ public class AdminGui {
 		deletebtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
-			 			
+			 	String live = valueSelected();
 				conn = (Connection) dbtest.connect();
 				String sql="DELETE  FROM Sunavlies WHERE LiveName =? ";
 				try {
+					if(live != null){
 					PreparedStatement pst = (PreparedStatement) conn.prepareStatement(sql);
-					pst.setString(1,valueSelected());
+					pst.setString(1,live);
 					rs=pst.execute();
 					UpdateJtable();
-					
-				} catch (SQLException e2) {
+					}
+				 
+				else{
+					JOptionPane.showMessageDialog(null, "You must select live to book ");
+				}
+				}
+				catch (SQLException e2) {
 					// TODO Auto-generated catch block
 					e2.printStackTrace();
 				} 
 			}//apopeira gia delete
 			
 		});
-		deletebtn.setBounds(122, 214, 102, 23);
+		deletebtn.setBounds(113, 214, 93, 23);
 		AdminPanel.add(deletebtn);
 		
 		JLabel label = new JLabel("\u039F\u03BD\u03BF\u03BC\u03B1 \u03A3\u03C5\u03BD\u03B1\u03C5\u03BB\u03B9\u03B1\u03C2");
@@ -212,7 +226,7 @@ public class AdminGui {
 		pricer.setBounds(152, 189, 102, 16);
 		InsertPanel.add(pricer);
 		JLabel label_3 = new JLabel("\u03A4\u03B9\u03BC\u03B7 \u0395\u03B9\u03C3\u03B9\u03C4\u03B7\u03C1\u03B9\u03BF\u03C5");
-		label_3.setBounds(21, 189, 82, 14);
+		label_3.setBounds(21, 189, 109, 14);
 		InsertPanel.add(label_3);
 		
 		JLabel label_4 = new JLabel("\u03A7\u03C9\u03C1\u03BF\u03C2 \u03A3\u03C5\u03BD\u03B1\u03C5\u03BB\u03B9\u03B1\u03C2");
@@ -280,7 +294,7 @@ public class AdminGui {
 	
 		
 		JLabel label_1 = new JLabel("\u0391\u03C1\u03B9\u03B8\u03BC\u03BF\u03C2 \u0398\u03B5\u03C3\u03B5\u03C9\u03BD");
-		label_1.setBounds(21, 116, 82, 14);
+		label_1.setBounds(21, 116, 109, 14);
 		InsertPanel.add(label_1);
 		
 		JLabel label_2 = new JLabel("\u0397\u03BC\u03B5\u03C1\u03BF\u03BC\u03B7\u03BD\u03B9\u03B1");

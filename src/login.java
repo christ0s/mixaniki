@@ -1,4 +1,6 @@
+import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 import javax.swing.*;
@@ -54,7 +56,9 @@ public class login extends javax.swing.JFrame {
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		
+		frame.setLocationRelativeTo(null);
+		  
+		    
 		JLabel lblNewLabel = new JLabel("Username");
 		lblNewLabel.setBounds(80, 55, 104, 20);
 		frame.getContentPane().add(lblNewLabel);
@@ -86,37 +90,28 @@ public class login extends javax.swing.JFrame {
 					pst.setString(1, Usertext.getText() );
 					pst.setString(2, Passtext.getText() );
 					
-					
-
-					
+										
 					rs=pst.executeQuery();
-					
-				
-					
+									
 						if( rs.next() & type1.equals(rs.getString("type"))){
 						 
 						
 						 AdminGui w =new AdminGui();
-						 w.Main();
-						
-						 
-					
-						
-						
+						 AdminGui.Main();
+						 frame.setVisible(false);
 					
 					 }
 						else if  ( type2.equals(rs.getString("type"))) 
 						{
 				
 							 EmpGui w =new EmpGui();
-							 w.main();
-							 
-							
+							 EmpGui.main();
+							 frame.setVisible(false);
+							 				
 						}
-						
-						
+												
 					 else {
-						 System.out.println("ID: "     );
+						 
 						 JOptionPane.showMessageDialog(null,"Username or Password is not correct ");
 						 
 					 }
@@ -125,7 +120,7 @@ public class login extends javax.swing.JFrame {
 					
 				}	
 				catch(Exception e){
-					JOptionPane.showMessageDialog(null, e	);
+					JOptionPane.showMessageDialog(null, "Username or Password is not correct"	);
 				}
 			}
 
