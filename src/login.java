@@ -14,8 +14,7 @@ public class login extends javax.swing.JFrame {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-	protected static final String Admin = null;
+	
 	 Statement pst = null;
 	 ResultSet rs = null;
 	 Connection conn=null;

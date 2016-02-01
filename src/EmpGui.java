@@ -183,6 +183,10 @@ public class EmpGui {
 		ticketsleftlbl.setBounds(90, 52, 46, 14);
 		BookingPanel.add(ticketsleftlbl);
 		
+
+		
+		
+		
 		JButton BookNow = new JButton("Book Now");
 		BookNow.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -379,10 +383,17 @@ public class EmpGui {
 		Exit.setBounds(278, 255, 148, 50);
 		Employpanel.add(Exit);
 		
+		JButton btnRefresh = new JButton("Refresh");
+		btnRefresh.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				UpdateJtable();
+			}
+		});
+		btnRefresh.setBounds(366, 187, 89, 23);
+		Employpanel.add(btnRefresh);
 		
 		
-		
-		
+
 		
 		
 	}

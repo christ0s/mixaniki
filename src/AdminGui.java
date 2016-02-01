@@ -192,7 +192,7 @@ public class AdminGui {
 					}
 				 
 				else{
-					JOptionPane.showMessageDialog(null, "You must select live to book ");
+					JOptionPane.showMessageDialog(null, "You must select live to delete ");
 				}
 				}
 				catch (SQLException e2) {
@@ -261,7 +261,7 @@ public class AdminGui {
 				
 				String sql = "INSERT INTO Sunavlies	 (Livename,Location,Adress,Seats,Date,Time,TicketPrice)"
 						+ "values(?,?,?,?,?,?,?)";
-					
+				
                  
 				try{
 					PreparedStatement pst = (PreparedStatement) conn.prepareStatement(sql); 
@@ -277,9 +277,14 @@ public class AdminGui {
 					InsertPanel.setVisible(false);
 					AdminPanel.setVisible(true);
 					UpdateJtable();
-					
-					
-						
+					JOptionPane.showMessageDialog(null, "Your live is saved succesfully in our Database ");
+					livename.setText(null);
+					Loc.setText(null);
+					Adress.setText(null);
+					seatnum.setText(null);
+					dater.setText(null);
+					timer.setText(null);
+					pricer.setText(null);
 				}	
 				catch(Exception e1){
 					JOptionPane.showMessageDialog(null, "Number of Seats must be integer"	);
@@ -308,6 +313,13 @@ public class AdminGui {
 				InsertPanel.setVisible(false);
 				AdminPanel.setVisible(true);
 				UpdateJtable();
+				livename.setText(null);
+				Loc.setText(null);
+				Adress.setText(null);
+				seatnum.setText(null);
+				dater.setText(null);
+				timer.setText(null);
+				pricer.setText(null);
 				
 			}
 		});
